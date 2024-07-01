@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pavan Test</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #mapid { height: 1000px; }
+  </style>
+</head>
+<body>
+  <div id="mapid"></div>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    var map = L.map('mapid').setView([51.505, -0.09], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors'
+    }).addTo(map);
+    var bikeIcon = L.icon({
+      iconUrl: 'https://static-00.iconduck.com/assets.00/bike-icon-1024x1024-z7xcsojp.png', 
+      iconSize: [38, 38], 
+      iconAnchor: [19, 47.5],
+    });
+
+    var bikeMarker = L.marker([51.5, -0.09], {icon: bikeIcon}).addTo(map);
+    var velocity = { x: 0.0001, y: 0.0001 }; 
+    function updateMarkerPosition(lat, lng) {
+      bikeMarker.setLatLng([lat, lng]);
+    }
+    function updateBikePosition() {
+      var currentPosition = bikeMarker.getLatLng();
+      var newLat = currentPosition.lat + velocity.y;
+      var newLng = currentPosition.lng + velocity.x;
+      updateMarkerPosition(newLat, newLng);
+    }
+    setInterval(updateBikePosition, 400);
+    updateBikePosition();
+  </script>
+</body>
+</html>
